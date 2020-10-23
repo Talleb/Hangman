@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Silent Night';
+  src: local('Silent Night'), url(./fonts/Silent\ Night\ -\ Demo.otf) format('truetype');
+}
