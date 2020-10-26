@@ -1,19 +1,19 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 const randomWords = require('random-words');
 
 
+const word = randomWords();
+
 app.get('/', (req,res) => {
-  res.send({
-    one: randomWords() ,
-    many: randomWords(5) ,
-    specificLength: (randomWords({ exactly: 1, maxLength: 6})) 
-  })
+  res.send({ word: randomWords() }) 
+  // res.send({ word }) -> word does not change on page refresh
 })
 
+
+const port = process.env.PORT || 8000;
+
 app.listen(port, () => {
-  console.log('Listening on port 3000');
-  console.log(randomWords())
-  console.log(randomWords({ exactly: 1, maxLength: 4 }))
+  console.log('Hangman server listening on port ', port);
+  console.log(word);
 })
