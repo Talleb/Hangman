@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import './Communication.css'
 
@@ -11,7 +11,6 @@ function Communication() {
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(e.target.childNodes[0].value);
     let text = e.target.childNodes[0].value;
 
     // removing this caused previous li elements to be replaced by the latest
@@ -28,10 +27,17 @@ function Communication() {
   //   setMessages([...messages, 'How do you do?'])
   // })
 
-  socket.on('chat message', (msg) => {
-    // setFeedback(msg)
-    setMessages([...messages, msg])
-  })
+  useEffect(() => {
+
+    socket.on('chat message', (payload) => {
+      // setFeedback(payload)
+      setMessages([...messages, payload.letter, payload.exists.toString()])
+      console.log(messages);
+      console.log('All letters from backend:');
+      console.log(payload.allLetters);
+    })
+
+  }, [messages])
 
 
   return (

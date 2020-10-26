@@ -8,6 +8,7 @@ const word = randomWords();
 
 app.use( express.static(__dirname + '/../build'));
 
+let letters = [];
 
 io.on('connection', (socket) => {
   console.log('a user is connected!');
@@ -15,7 +16,19 @@ io.on('connection', (socket) => {
   // send a message to everyone incl. sender
   socket.on('chat message', (msg) => {
     console.log('message: ', msg);
-    io.emit('chat message', msg.toUpperCase())
+
+    let exists = word.includes(msg)
+
+    letters.push(msg.toUpperCase());
+    letters.push(exists)
+    console.log(letters);
+
+
+    io.emit('chat message', {
+      letter: msg.toUpperCase(),
+      exists,
+      allLetters: letters
+    })
 
   })
   
