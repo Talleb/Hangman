@@ -4,7 +4,7 @@ import MainPage from './components/MainPage.jsx'
 
 function App() {
   const BackGrounds = ['Graveyard', 'House', 'Pumpkins', 'Woods', 'Bats']
-  const BackGround = BackGrounds[Math.floor(Math.random() * Math.floor(5))]
+  const BackGround = BackGrounds[Math.floor(Math.random() * 5)]
   const [randomBackground, setRandomBackground] = useState(null);
 
 
