@@ -14,19 +14,20 @@ io.on('connection', (socket) => {
   console.log('a user is connected!');
 
   // send a message to everyone incl. sender
-  socket.on('chat message', (msg) => {
+  socket.on('toserver', (msg) => {
     console.log('message: ', msg);
 
     let exists = word.includes(msg)
+    let index = word.indexOf(msg);
 
     letters.push(msg.toUpperCase());
     letters.push(exists)
     console.log(letters);
 
-
-    io.emit('chat message', {
+    io.emit('touser', {
       letter: msg.toUpperCase(),
       exists,
+      index: index > -1 ? index : '',
       allLetters: letters
     })
 
@@ -36,7 +37,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   })
 
-  // send a message to all sockets except the emitting socket
+  // send a message to all sockets except the emitting sockets
   socket.broadcast.emit('hi everyone!')
 })
 

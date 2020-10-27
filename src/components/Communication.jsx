@@ -16,7 +16,7 @@ function Communication() {
     // removing this caused previous li elements to be replaced by the latest
     setMessages([...messages, text]) 
 
-    socket.emit('chat message', text);
+    socket.emit('toserver', text);
 
     e.target.childNodes[0].value = ""
     
@@ -29,15 +29,15 @@ function Communication() {
 
   useEffect(() => {
 
-    socket.on('chat message', (payload) => {
+    socket.on('touser', (payload) => {
       // setFeedback(payload)
-      setMessages([...messages, payload.letter, payload.exists.toString()])
+      setMessages([...messages, payload.letter, payload.exists.toString(), payload.index ])
       console.log(messages);
       console.log('All letters from backend:');
       console.log(payload.allLetters);
     })
 
-  }, [messages])
+  }, [messages, socket])
 
 
   return (
