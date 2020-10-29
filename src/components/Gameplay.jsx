@@ -22,16 +22,20 @@ export default function Gameplay({match}) {
     })
   }, [match])
   
-  //Functions
-  function SendGuessWord(e) {
-    e.preventDefault()
-    //Sending Guess Word to the server
-    FrontEndSocket.emit('Messages', WordGuessed)
+  useEffect(()=>{
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data=> {
       setOutputWord(data)
       console.log(data);
     })
+  }, [WordGuessed])
+  
+  //Functions
+  function SendGuessWord(e) {
+    e.preventDefault()
+    //Sending Guess Word to the server
+    FrontEndSocket.emit('Messages', WordGuessed)
+    
     e.target.value = ''
   }
   
