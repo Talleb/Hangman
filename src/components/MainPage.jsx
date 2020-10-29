@@ -17,7 +17,7 @@ const MainPage = () => {
     }, [])
 
 
-    const inputs = word.map(letter => (<span>{letter}</span>))
+    const inputs = word.map((letter, index) => (<span key={index+letter}>{letter}</span>))
     /** end */
 
     function LetterClick(e) {
