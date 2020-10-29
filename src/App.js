@@ -11,7 +11,7 @@ function App() {
       <HeadRouter>
         <Switch>
           <Route path="/" exact component={MainPage}/>
-          <Route path="/Gameplay" exact component={Gameplay}/>
+          <Route path="/Gameplay/:PlayerName"  component={Gameplay}/>
         </Switch>
       </HeadRouter>
     </div>
