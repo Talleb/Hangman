@@ -5,7 +5,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const path = require('path');
 const http = require('http');
-// const cors = require('cors');
+const cors = require('cors');
 const randomWords = require('random-words');
 const {addUser, FindUser, Users} = require('./Users');
 
@@ -15,7 +15,7 @@ const server = http.createServer(app)
 const backEndSocket = socketIO(server)
 
 //Middlewares
-// app.use(cors())    //temp disable cors()
+app.use(cors())    //temp disable cors()
 app.use(express.static(__dirname + '/../build')) //Listen to the React html
 
 //Variables
@@ -32,17 +32,20 @@ backEndSocket.on('connection', Socket => {
   //Accepting Name from the FrontEnd and sending back an array with the names
   Socket.on('UserInfo', dataFrontEnd => {
      addUser(Socket.id, dataFrontEnd)
-     backEndSocket.emit('UsersArray', Users)
+     backEndSocket.emit('UsersArray', {
+       Users,
+       length: word.length
+      })
   })
   
   Socket.on('Messages', data => {
     //Find the user who send the Guess Word 
     let user = FindUser(Socket.id)
-    currentGuessedWords.push(formatMessage(user.userName, data))
+    // currentGuessedWords.push(formatMessage(user.userName, data))
 
-    let exists = (word.includes(data) || word === data.toLowerCase()) ? true : false
+    let exists = (word.includes(data.toLowerCase()) || word === data.toLowerCase()) ? true : false
 
-    let index = word.indexOf(data);
+    let index = word.indexOf(data.toLowerCase());
 
     letters.push(data.toUpperCase());
     letters.push(exists)
@@ -76,6 +79,9 @@ app.get('/*', function (req, res) {
 
 server.listen(PORT, ()=>{
   console.log(`Server is running on PORT: ${PORT}`);
+  console.log(word);
+  console.log(word.length);
+
 })
 
 //Functions
