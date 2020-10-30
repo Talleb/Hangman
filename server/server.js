@@ -1,19 +1,87 @@
+// Brian's server edited by Vimbayi
+
+//Packages
 const express = require('express');
-const app = express();
+const socketIO = require('socket.io');
+const path = require('path');
+const http = require('http');
+// const cors = require('cors');
 const randomWords = require('random-words');
+const {addUser, FindUser, Users} = require('./Users');
 
+//Initializing
+const app = express();
+const server = http.createServer(app)
+const backEndSocket = socketIO(server)
 
+//Middlewares
+// app.use(cors())    //temp disable cors()
+app.use(express.static(__dirname + '/../build')) //Listen to the React html
+
+//Variables
+const PORT = 8080 || process.env.PORT
+let currentGuessedWords = []
+let letters = [];
 const word = randomWords();
 
-app.get('/', (req,res) => {
-  res.send({ word: randomWords() }) 
-  // res.send({ word }) -> word does not change on page refresh
+
+//Server Configurations   //BackEndSocket to send and Socket to Recive
+backEndSocket.on('connection', Socket => {
+  console.log('a user is connected!');
+  
+  //Accepting Name from the FrontEnd and sending back an array with the names
+  Socket.on('UserInfo', dataFrontEnd => {
+     addUser(Socket.id, dataFrontEnd)
+     backEndSocket.emit('UsersArray', Users)
+  })
+  
+  Socket.on('Messages', data => {
+    //Find the user who send the Guess Word 
+    let user = FindUser(Socket.id)
+    currentGuessedWords.push(formatMessage(user.userName, data))
+
+    let exists = (word.includes(data) || word === data.toLowerCase()) ? true : false
+
+    let index = word.indexOf(data);
+
+    letters.push(data.toUpperCase());
+    letters.push(exists)
+    console.log(letters);
+
+    backEndSocket.emit('GuessWord', {
+      letter: data.toUpperCase(),
+      exists,
+      index: index > -1 ? index : '',
+      allLetters: letters,
+      currentGuessedWords
+    })
+
+
+  })
+  //When someone Disconnect do this..
+  Socket.on('disconnect', (e)=>{
+    console.log(e);
+    console.log("someone disconnected or refreshed site");
+  })
 })
 
 
-const port = process.env.PORT || 8000;
-
-app.listen(port, () => {
-  console.log('Hangman server listening on port ', port);
-  console.log(word);
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname + '/../build/index.html'), function (err) {
+      if (err) {
+          res.status(500).send(err)
+      }
+  })
 })
+
+server.listen(PORT, ()=>{
+  console.log(`Server is running on PORT: ${PORT}`);
+})
+
+//Functions
+function formatMessage(userName, Text){
+  return {
+    userName,
+    Text
+  }
+}
