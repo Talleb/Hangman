@@ -14,10 +14,10 @@ const MainPage = () => {
     const [outputWord, setOutputWord] = useState([])
     
     
+    const fillWord = () => {
+        setWord(Array(wordLength).fill('-'))
+    }
     useEffect(() => {
-        const fillWord = () => {
-            setWord(Array(wordLength).fill('-'))
-        }
 
         // let nameUrl = match.params.PlayerName
 
@@ -27,7 +27,8 @@ const MainPage = () => {
         FrontEndSocket.on('UsersArray', data => {
             console.log(data);
             setUsers(data.Users)
-            setWordLength(data.length)
+            // setWordLength(data.letters)
+            setWord(Array(data.length).fill('-'))
             
         })
         fillWord();
@@ -40,18 +41,26 @@ const MainPage = () => {
         FrontEndSocket.on('GuessWord', data=> {
           setOutputWord(data)
           console.log(data);
+
           console.log(word);
 
           if (data.index > -1) {
-              setWord(word.splice(data.index, 0, data.letter))
+              console.log('Index number found!');
+              console.log(word);
+
+              let newWord = Array(data.length).fill('-')
+              newWord.splice(data.index, 1, data.letter)
+
+              console.log(wordLength);
+              console.log(newWord);
+              setWord(data.allLetters)
+            //   setWord(word.splice(data.index, 0, data.letter))
             } 
         })
       }, [WordGuessed])
       
       //Functions
       function SendGuessWord(guess) {
-        // e.preventDefault()
-        //Sending Guess Word to the server
         // FrontEndSocket.emit('Messages', WordGuessed)
         FrontEndSocket.emit('Messages', guess)
         
@@ -65,6 +74,8 @@ const MainPage = () => {
         e.persist()
         let guess = e.target.value
         SendGuessWord(guess)
+
+        console.log(word);
 
         // e.target value === Skall kontrolleras mot bokstäverna i ordet.
         e.target.value === 'A' ? e.target.className = 'Right' : e.target.className = 'Wrong'

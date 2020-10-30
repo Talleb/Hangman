@@ -21,8 +21,8 @@ app.use(express.static(__dirname + '/../build')) //Listen to the React html
 //Variables
 const PORT = 8080 || process.env.PORT
 let currentGuessedWords = []
-let letters = [];
 const word = randomWords();
+let letters = Array(word.length).fill('-')
 
 
 //Server Configurations   //BackEndSocket to send and Socket to Recive
@@ -34,7 +34,8 @@ backEndSocket.on('connection', Socket => {
      addUser(Socket.id, dataFrontEnd)
      backEndSocket.emit('UsersArray', {
        Users,
-       length: word.length
+       length: word.length,
+       letters
       })
   })
   
@@ -45,16 +46,21 @@ backEndSocket.on('connection', Socket => {
 
     let exists = (word.includes(data.toLowerCase()) || word === data.toLowerCase()) ? true : false
 
-    let index = word.indexOf(data.toLowerCase());
+    let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
 
-    letters.push(data.toUpperCase());
-    letters.push(exists)
+    if (index > -1) {
+      letters.splice(index, 1, data)
+    }
+
+    // letters.push(data.toUpperCase());
+    // letters.push(exists)
     console.log(letters);
 
     backEndSocket.emit('GuessWord', {
       letter: data.toUpperCase(),
       exists,
-      index: index > -1 ? index : '',
+      index: index,
+      length: word.length,
       allLetters: letters,
       currentGuessedWords
     })
