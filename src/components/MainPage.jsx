@@ -3,14 +3,13 @@ import io from 'socket.io-client'
 import './MainPage.css'
 
 const MainPage = () => {
-    const Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    const [letters, setLetters] = useState([])
 
     const FrontEndSocket = io('http://localhost:8080');
     const [word, setWord] = useState([])  
     const [Users, setUsers] = useState([]) 
     const [WordGuessed, setWordGuessed] = useState('')
     const [outputWord, setOutputWord] = useState([])
-    
     
     useEffect(() => {
 
@@ -21,10 +20,12 @@ const MainPage = () => {
         //Receiving users array from Server & adding to Users
         FrontEndSocket.on('UsersArray', data => {
             console.log(data);
+            setLetters(data.alphabet)
             setUsers(data.Users)
-            setWord(Array(data.length).fill('-'))
+            setWord(data.letters)
             
         })
+
 
     }, []) 
     //FrontEndSocket as a dependency hooks -> endless loop because socket.io is continuously connecting and disconnecting (see backend terminal)
@@ -38,11 +39,16 @@ const MainPage = () => {
 
           if (data.index > -1) {
               setWord(data.allLetters)
-            } 
+          } 
+
+          setLetters(data.alphabet)
+          setUsers(data.Users)
+          console.log(letters);
+
         })
       }, [FrontEndSocket, WordGuessed])
       
-    //Functions
+
     function SendGuessWord(guess) {
         FrontEndSocket.emit('Messages', guess)        
     }
@@ -52,7 +58,8 @@ const MainPage = () => {
         SendGuessWord(e.target.value)
         
         // e.target value === Skall kontrolleras mot bokstäverna i ordet.
-        e.target.value === 'A' ? e.target.className = 'Right' : e.target.className = 'Wrong'
+        // e.target.value === 'A' ? e.target.className = 'Right' : e.target.className = 'Wrong'
+        
     }
     
     const inputs = word.map((letter, index) => (<span key={index+letter}>{letter}</span>))
@@ -62,12 +69,12 @@ const MainPage = () => {
             <h1>Spooky Hangman</h1>
             <div>{ inputs }</div>
             <div>
-                {Letters.map((Letter) =>
+                {letters.map((letter) =>
                     <button
-                        className="Active"
-                        value={Letter}
-                        key={Letter}
-                        onClick={e => LetterClick(e)}> {Letter}
+                        className={letter.class}
+                        value={letter.name}
+                        key={letter.name}
+                        onClick={e => LetterClick(e)}> {letter.name}
                     </button>)}
             </div>
         </div>

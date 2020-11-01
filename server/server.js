@@ -8,6 +8,7 @@ const http = require('http');
 const cors = require('cors');
 const randomWords = require('random-words');
 const {addUser, FindUser, Users} = require('./Users');
+let alphabet = require('./alphabet');
 
 //Initializing
 const app = express();
@@ -33,6 +34,7 @@ backEndSocket.on('connection', Socket => {
   Socket.on('UserInfo', dataFrontEnd => {
      addUser(Socket.id, dataFrontEnd)
      backEndSocket.emit('UsersArray', {
+       alphabet,
        Users,
        length: word.length,
        letters
@@ -44,6 +46,7 @@ backEndSocket.on('connection', Socket => {
     let user = FindUser(Socket.id)
     // currentGuessedWords.push(formatMessage(user.userName, data))
 
+    // convert into function
     let exists = (word.includes(data.toLowerCase()) || word === data.toLowerCase()) ? true : false
 
     let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
@@ -52,8 +55,14 @@ backEndSocket.on('connection', Socket => {
       letters.splice(index, 1, data)
     }
 
-    // letters.push(data.toUpperCase());
-    // letters.push(exists)
+    if (data.length === 1) {
+      alphabet.map(letter => {
+        if(letter.name === data) {
+          exists ? letter.class = "Right" : letter.class = "Wrong"
+        }
+      })
+    }
+
     console.log(letters);
 
     backEndSocket.emit('GuessWord', {
@@ -62,7 +71,8 @@ backEndSocket.on('connection', Socket => {
       index: index,
       length: word.length,
       allLetters: letters,
-      currentGuessedWords
+      currentGuessedWords,
+      alphabet
     })
 
 
