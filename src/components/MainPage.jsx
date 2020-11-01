@@ -42,19 +42,12 @@ const MainPage = () => {
           setOutputWord(data)
           console.log(data);
 
-          console.log(word);
 
           if (data.index > -1) {
               console.log('Index number found!');
               console.log(word);
-
-              let newWord = Array(data.length).fill('-')
-              newWord.splice(data.index, 1, data.letter)
-
-              console.log(wordLength);
-              console.log(newWord);
+              
               setWord(data.allLetters)
-            //   setWord(word.splice(data.index, 0, data.letter))
             } 
         })
       }, [WordGuessed])
@@ -74,8 +67,6 @@ const MainPage = () => {
         e.persist()
         let guess = e.target.value
         SendGuessWord(guess)
-
-        console.log(word);
 
         // e.target value === Skall kontrolleras mot bokstäverna i ordet.
         e.target.value === 'A' ? e.target.className = 'Right' : e.target.className = 'Wrong'
