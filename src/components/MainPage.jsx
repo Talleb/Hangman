@@ -6,17 +6,12 @@ const MainPage = () => {
     const Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
     const FrontEndSocket = io('http://localhost:8080');
-    const length = 5    //from backend
     const [word, setWord] = useState([])  
-    const [wordLength, setWordLength] = useState('')
     const [Users, setUsers] = useState([]) 
     const [WordGuessed, setWordGuessed] = useState('')
     const [outputWord, setOutputWord] = useState([])
     
     
-    const fillWord = () => {
-        setWord(Array(wordLength).fill('-'))
-    }
     useEffect(() => {
 
         // let nameUrl = match.params.PlayerName
@@ -27,13 +22,12 @@ const MainPage = () => {
         FrontEndSocket.on('UsersArray', data => {
             console.log(data);
             setUsers(data.Users)
-            // setWordLength(data.letters)
             setWord(Array(data.length).fill('-'))
             
         })
-        fillWord();
 
-    }, [wordLength])
+    }, []) 
+    //FrontEndSocket as a dependency hooks -> endless loop because socket.io is continuously connecting and disconnecting (see backend terminal)
 
 
     useEffect(()=>{
@@ -42,35 +36,26 @@ const MainPage = () => {
           setOutputWord(data)
           console.log(data);
 
-
           if (data.index > -1) {
-              console.log('Index number found!');
-              console.log(word);
-              
               setWord(data.allLetters)
             } 
         })
-      }, [WordGuessed])
+      }, [FrontEndSocket, WordGuessed])
       
-      //Functions
-      function SendGuessWord(guess) {
-        // FrontEndSocket.emit('Messages', WordGuessed)
-        FrontEndSocket.emit('Messages', guess)
-        
-        // e.target.value = ''
-      }
-
-
-    const inputs = word.map((letter, index) => (<span key={index+letter}>{letter}</span>))
-
+    //Functions
+    function SendGuessWord(guess) {
+        FrontEndSocket.emit('Messages', guess)        
+    }
+    
     function LetterClick(e) {
         e.persist()
-        let guess = e.target.value
-        SendGuessWord(guess)
-
+        SendGuessWord(e.target.value)
+        
         // e.target value === Skall kontrolleras mot bokstäverna i ordet.
         e.target.value === 'A' ? e.target.className = 'Right' : e.target.className = 'Wrong'
     }
+    
+    const inputs = word.map((letter, index) => (<span key={index+letter}>{letter}</span>))
 
     return (
         <div>
