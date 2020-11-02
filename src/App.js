@@ -1,6 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
-import './App.css';
 import MainPage from './components/MainPage.jsx'
+import Gameplay from './components/Gameplay.jsx'
+import {BrowserRouter as HeadRouter, Switch, Route} from 'react-router-dom'
+import './App.css';
+import './CSS/CssV1.css'
 
 function App() {
   const BackGrounds = ['Graveyard', 'House', 'Pumpkins', 'Woods', 'Bats']
