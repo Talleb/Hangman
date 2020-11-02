@@ -5,6 +5,9 @@ const path = require('path');
 const http = require('http');
 const cors = require('cors');
 const {addUser, FindUser, Users} = require('./Users');
+const randomWords = require('random-words');
+
+
 
 //Initializing
 const app = express();
@@ -16,6 +19,7 @@ app.use(cors())
 app.use(express.static(__dirname + '/../build')) //Listen to the React html
 
 //Variables
+const word = randomWords();
 const PORT = 8080 || process.env.PORT
 let currentGuessedWords = []
 

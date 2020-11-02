@@ -1,3 +1,48 @@
+.Graveyard {
+    background-image: url(./images/Graveyard.jpg);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 'center';
+    text-align: center;
+}
+
+.Bats {
+    background-image: url(./images/Bats.jpg);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 'center';
+    text-align: center;
+}
+
+.House {
+    background-image: url(./images/House.jpg);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 'center';
+    text-align: center;
+}
+
+.Woods {
+    background-image: url(./images/Woods.jpg);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 'center';
+    text-align: center;
+}
+
+.Pumpkins {
+    background-image: url(./images/Pumpkins.png);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 'center';
+    text-align: center;
+}
+
 .App {
   text-align: center;
 }

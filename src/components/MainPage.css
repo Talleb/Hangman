@@ -1,0 +1,31 @@
+h1{
+    font-family: Silent Night;
+    color:white;
+    font-size: 2,5em;
+}
+
+.Active{
+    border: none;
+    padding: 1em;
+    margin: 0.3em;
+    font-family: Silent Night;
+    font-weight: 600;
+}
+
+.Right{
+    border: none;
+    padding: 1em;
+    margin: 0.3em;
+    font-family: Silent Night;
+    font-weight: 600;
+    background: green;
+}
+
+.Wrong{
+    border: none;
+    padding: 1em;
+    margin: 0.3em;
+    font-family: Silent Night;
+    font-weight: 600;
+    background: red;
+}
