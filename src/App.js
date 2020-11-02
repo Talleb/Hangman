@@ -5,6 +5,9 @@ import Gameplay from './components/Gameplay.jsx'
 import {BrowserRouter as HeadRouter, Switch, Route} from 'react-router-dom'
 import './App.css';
 import './CSS/CssV1.css'
+import LandingPage from './components/LandingPage.jsx'
+import LoadingPage from './components/LoadingPage.jsx'
+
 
 function App() {
   const BackGrounds = ['Graveyard', 'House', 'Pumpkins', 'Woods', 'Bats']
@@ -22,7 +25,23 @@ function App() {
   return (
     <div>{randomBackground ?
       <main className={randomBackground}>
-        <MainPage />
+      <Router>
+        <Switch>
+          <Route path="/loadingpage">
+            <div className="App">
+              <LoadingPage/>
+            </div>
+          </Route>
+          <Route path="/mainpage">
+            <div className="App">
+              <MainPage/>
+            </div>
+          </Route>
+          <Route path="/">
+            <LandingPage />
+          </Route>
+        </Switch>
+      </Router>
       </main> : "loading"}
     </div>
   );
