@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import io from 'socket.io-client'
-import { v4 as uuidv4 } from 'uuid';
-import Alphabet from './Alphabet.js';
 import './Gameplay.css'
 
 const FrontEndSocket = io('http://localhost:8080');
@@ -11,6 +9,7 @@ export default function Gameplay({ match }) {
   const [Users, setUsers] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
   //need to Send info from the front end to the back end and connect both users
   useEffect(() => {
@@ -56,6 +55,18 @@ export default function Gameplay({ match }) {
 
   }
 
+  function getClass(letter) {
+    let word = outputWord.find(word => word.text.indexOf(letter) > -1)
+    // console.log(word);
+    if (word) {
+      if(word.exists) return 'Right'
+      else return 'Wrong'
+    } else {
+      return 'Active'
+    }
+  }
+
+
   return (
     <div>
       <h1>Spooky Hangman</h1>
@@ -63,10 +74,6 @@ export default function Gameplay({ match }) {
         <div id="users">
           <h2>users</h2>
           {Users.map(user => <span key={user.id}>{user.userName}</span>)}
-        </div>
-
-        <div className="chatting">
-          {outputWord.map(outputWord => <span key={uuidv4()}>{outputWord.Text}</span>)}
         </div>
 
         <div>{ inputs }</div>
@@ -78,12 +85,12 @@ export default function Gameplay({ match }) {
         <input type="submit" value="Send" />
       </form>
       <div>
-        {Alphabet.map((Letter) =>
+        {letters.map((letter) =>
           <button
-            className={Letter.class}
-            value={Letter.name}
-            key={Letter.name}
-            onClick={e => SendLetter(e)}> {Letter.name}
+            className={getClass(letter)}
+            value={letter}
+            key={letter}
+            onClick={e => SendLetter(e)}> {letter}
           </button>)}
       </div>
     </div>

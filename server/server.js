@@ -36,7 +36,9 @@ backEndSocket.on('connection', Socket => {
   Socket.on('Messages', data => {
     //Find the user who send the Guess Word 
     let user = FindUser(Socket.id)
-    currentGuessedWords.push(formatMessage(user.userName, data))
+    let exists = (word.includes(data.toLowerCase()) || word === data.toLowerCase()) ? true : false
+
+    currentGuessedWords.push(formatMessage(user.userName, data, exists))
 
     let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
 
@@ -82,9 +84,10 @@ server.listen(PORT, ()=>{
 })
 
 //Functions
-function formatMessage(userName, Text){
+function formatMessage(userName, text, exists){
   return {
     userName,
-    Text
+    text,
+    exists
   }
 }
