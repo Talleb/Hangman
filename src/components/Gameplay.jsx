@@ -13,7 +13,6 @@ export default function Gameplay({ match }) {
 
   //need to Send info from the front end to the back end and connect both users
   useEffect(() => {
-    console.log(match);
     let nameUrl = match.params.PlayerName
 
     //Sending name to Server
@@ -21,8 +20,6 @@ export default function Gameplay({ match }) {
 
     //Reciving users array from Server & adding to Users
     FrontEndSocket.on('UsersArray', data => {
-      console.log(data);  /** */
-      console.log(WordGuessed);
       setUsers(data.Users)
       setGuessedLetters(data.guessedLetters)
     })
@@ -57,7 +54,6 @@ export default function Gameplay({ match }) {
 
   function getClass(letter) {
     let word = outputWord.find(word => word.text.indexOf(letter) > -1)
-    // console.log(word);
     if (word) {
       if(word.exists) return 'Right'
       else return 'Wrong'

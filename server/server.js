@@ -8,7 +8,6 @@ const {addUser, FindUser, Users} = require('./Users');
 const randomWords = require('random-words');
 
 
-
 //Initializing
 const app = express();
 const server = http.createServer(app)
@@ -46,20 +45,6 @@ backEndSocket.on('connection', Socket => {
       guessedLetters.splice(index, 1, data)
     }
 
-    // if (data.length === 1) {
-    //   alphabet.map(letter => {
-    //     if(letter.name === data) {
-    //       exists ? letter.class = "Right" : letter.class = "Wrong"
-    //     }
-    //   })
-    // }
-
-    // if(data.length > 1) {
-    //   console.log(data);
-    // } else {
-
-    // }
-
     backEndSocket.emit('GuessWord', { currentGuessedWords, guessedLetters })
   })
   //When someone Disconnect do this..
@@ -80,7 +65,7 @@ app.get('/*', function (req, res) {
 
 server.listen(PORT, ()=>{
   console.log(`Server is running on PORT: ${PORT}`);
-  console.log(word);  /** */
+  console.log(word);  
 })
 
 //Functions
