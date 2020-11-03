@@ -12,7 +12,7 @@ const LandingPage = () => {
     function submitName(e) {
         e.preventDefault()
         //Skickar Name Via URL
-        history.push(`/Gameplay/${PlayerName}`)
+        history.push(`/LoadingPage/${PlayerName}`)
     }
     return (
         <div>

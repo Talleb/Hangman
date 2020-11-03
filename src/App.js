@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import MainPage from './components/MainPage.jsx'
 import Gameplay from './components/Gameplay.jsx'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.css';
@@ -27,20 +26,9 @@ function App() {
       <main className={randomBackground}>
         <Router>
           <Switch>
-            <Route path="/Gameplay/:PlayerName" component={Gameplay} />
-            <Route path="/loadingpage">
-              <div className="App">
-                <LoadingPage />
-              </div>
-            </Route>
-            <Route path="/mainpage">
-              <div className="App">
-                <MainPage />
-              </div>
-            </Route>
-            <Route path="/">
-              <LandingPage />
-            </Route>
+            <Route path="/" exact component={LandingPage} />
+            <Route path="/LoadingPage/:PlayerName" component={LoadingPage}/>
+            <Route path="/Gameplayer" component={Gameplay} />
           </Switch>
         </Router>
       </main> : "loading"}
