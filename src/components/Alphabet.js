@@ -1,0 +1,4 @@
+
+let Alphabet = [{name:'A', class: 'Active'}, {name:'B', class: 'Active' }, {name:'C', class: 'Active' }, {name:'D', class: 'Active' }, {name:'E', class: 'Active' }, {name:'F', class: 'Active' }, {name:'G', class: 'Active' }, {name:'H', class: 'Active' }, {name:'I', class: 'Active' }, {name:'J', class: 'Active' }, {name:'K', class: 'Active' }, {name:'L', class: 'Active' }, {name:'M', class: 'Active' }, {name:'N', class: 'Active' }, {name:'O', class: 'Active' }, {name:'P', class: 'Active' }, {name:'Q', class: 'Active' }, {name:'R', class: 'Active' }, {name:'S', class: 'Active' }, {name:'T', class: 'Active' }, {name:'U', class: 'Active' }, {name:'V', class: 'Active' }, {name:'W', class: 'Active' }, {name:'X', class: 'Active' }, {name:'Y', class: 'Active' }, {name:'Z', class: 'Active' }]
+
+export default Alphabet;
