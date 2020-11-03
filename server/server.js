@@ -17,6 +17,7 @@ const backEndSocket = socketIO(server)
 //Middlewares
 app.use(cors())
 app.use(express.static(__dirname + '/../build')) //Listen to the React html
+app.use(express.json())
 
 //Variables
 // const word = randomWords();
@@ -46,6 +47,12 @@ backEndSocket.on('connection', Socket => {
 })
 
 
+//Get all users
+app.get('/getUsers', (req, res)=>{
+  res.json(Users)
+  })
+
+//Settings for Heroku
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname + '/../build/index.html'), function (err) {
       if (err) {
@@ -53,7 +60,7 @@ app.get('/*', function (req, res) {
       }
   })
 })
-
+//PORT 
 server.listen(PORT, ()=>{
   console.log(`Server is running on PORT: ${PORT}`);
 })

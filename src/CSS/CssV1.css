@@ -47,4 +47,15 @@ label {
   width: 150px;
   height: 50px;
 }
+
+.StartGame-Btn {
+  display: block;
+  margin: 0 auto;
+  font-size: 1.5em;
+  border: 1px solid black;
+  height: 35px;
+  width: 100px;
+  background-color: whitesmoke;
+  color: black;
+}
 /*# sourceMappingURL=CssV1.css.map */

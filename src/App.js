@@ -28,7 +28,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={LandingPage} />
             <Route path="/LoadingPage/:PlayerName" component={LoadingPage}/>
-            <Route path="/Gameplayer" component={Gameplay} />
+            <Route path="/Gameplay" component={Gameplay} />
           </Switch>
         </Router>
       </main> : "loading"}

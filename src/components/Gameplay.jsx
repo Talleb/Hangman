@@ -5,25 +5,22 @@ import './Gameplay.css'
 
 const FrontEndSocket = io('http://localhost:8080');
 
-export default function Gameplay({ match }) {
+export default function Gameplay() {
   const [Users, setUsers] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
   const Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-  //need to Send info from the front end to the back end and connect both users
   useEffect(() => {
-    console.log(match);
-    let nameUrl = match.params.PlayerName
-    //Sending name to Server
-    FrontEndSocket.emit('UserInfo', nameUrl)
-    //Reciving users array from Server & adding to Users
-    FrontEndSocket.on('UsersArray', data => {
-      setUsers(data)
-    })
-  }, [match])
-
-  useEffect(() => {
+    //Fetch Users to display and done? Lol :D
+    async function getUsers(){
+      let get = await fetch('/getUsers');
+      console.log(get);
+      let users = await get.json();
+      console.log(users);
+      setUsers(users)
+    }
+    getUsers()
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
       setOutputWord(data)

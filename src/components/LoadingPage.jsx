@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {NavLink} from 'react-router-dom'
 import io from 'socket.io-client'
 import './LoadingPage.css'
 
@@ -22,13 +23,13 @@ const LoadingPage = ({match}) => {
     return (
         <div className="App">
             <h1>Spooky Hangman</h1>
-             <h2>WAITING FOR PlAYER TWO</h2>  
+            {Users.length < 2 ? <h2>WAITING FOR PlAYER TWO</h2> : ""}  
 
             <div id="users">
               <h2>users</h2>
               {Users.map(user => <span key={user.id}>{user.userName}</span>)}
             </div>
-            {Users.length < 2 ? "" : <button>Start Game</button>}
+            {Users.length < 2 ? "" : <NavLink to="/Gameplay" className="StartGame-Btn">Start Game</NavLink>}
         </div>
     )
 }
