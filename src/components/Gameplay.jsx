@@ -7,6 +7,7 @@ import './Gameplay.css'
 const FrontEndSocket = io('http://localhost:8080');
 
 export default function Gameplay({ match }) {
+  const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
@@ -15,11 +16,16 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     console.log(match);
     let nameUrl = match.params.PlayerName
+
     //Sending name to Server
     FrontEndSocket.emit('UserInfo', nameUrl)
+
     //Reciving users array from Server & adding to Users
     FrontEndSocket.on('UsersArray', data => {
-      setUsers(data)
+      console.log(data);  /** */
+      console.log(WordGuessed);
+      setUsers(data.Users)
+      setGuessedLetters(data.guessedLetters)
     })
   }, [match])
 
@@ -30,6 +36,8 @@ export default function Gameplay({ match }) {
       console.log(data);
     })
   }, [])
+
+  let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-'? '' : 'chatting'} key={index+letter}>{letter}</span>))
 
   //Functions
   function SendGuessWord(e) {
@@ -60,10 +68,12 @@ export default function Gameplay({ match }) {
           {outputWord.map(outputWord => <span key={uuidv4()}>{outputWord.Text}</span>)}
         </div>
 
+        <div id="guesses">{ inputs }</div>
+
       </div>
       <form onSubmit={SendGuessWord}>
         <label>Guess Word</label>
-        <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="1" type="text" placeholder="Send Text" />
+        <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
         <input type="submit" value="Send" />
       </form>
       <div>

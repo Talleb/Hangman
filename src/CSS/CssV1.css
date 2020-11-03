@@ -19,6 +19,18 @@ label {
     font-size: 4em;
 }
 
+#guesses {
+  color:white;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 4em;
+}
+
+#guesses > span {
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  
+}
+
 /* #chatBox #chatting {
   margin: 0 auto;
   border: 1px solid #a50000;

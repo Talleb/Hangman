@@ -19,9 +19,10 @@ app.use(cors())
 app.use(express.static(__dirname + '/../build')) //Listen to the React html
 
 //Variables
-const word = randomWords();
 const PORT = 8080 || process.env.PORT
 let currentGuessedWords = []
+const word = randomWords();
+let guessedLetters = Array(word.length).fill('-')
 
 //Server Configurations   //BackEndSocket to send and Socket to Recive
 backEndSocket.on('connection', Socket => {
@@ -29,7 +30,7 @@ backEndSocket.on('connection', Socket => {
   //Accepting Name from the FrontEnd and sending back an array with the names
   Socket.on('UserInfo', dataFrontEnd => {
      addUser(Socket.id, dataFrontEnd)
-     backEndSocket.emit('UsersArray', Users)
+     backEndSocket.emit('UsersArray', { Users, guessedLetters })
   })
   
   Socket.on('Messages', data => {
@@ -56,6 +57,7 @@ app.get('/*', function (req, res) {
 
 server.listen(PORT, ()=>{
   console.log(`Server is running on PORT: ${PORT}`);
+  console.log(word);  /** */
 })
 
 //Functions
