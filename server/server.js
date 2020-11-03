@@ -37,7 +37,14 @@ backEndSocket.on('connection', Socket => {
     //Find the user who send the Guess Word 
     let user = FindUser(Socket.id)
     currentGuessedWords.push(formatMessage(user.userName, data))
-    backEndSocket.emit('GuessWord', currentGuessedWords)
+
+    let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
+
+    if (index > -1) {
+      guessedLetters.splice(index, 1, data)
+    }
+
+    backEndSocket.emit('GuessWord', { currentGuessedWords, guessedLetters })
   })
   //When someone Disconnect do this..
   Socket.on('disconnect', (e)=>{

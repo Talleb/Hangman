@@ -32,8 +32,9 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
-      setOutputWord(data)
       console.log(data);
+      setOutputWord(data.currentGuessedWords)
+      setGuessedLetters(data.guessedLetters)
     })
   }, [])
 
