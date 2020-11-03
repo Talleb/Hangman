@@ -38,7 +38,7 @@ export default function Gameplay({ match }) {
     })
   }, [])
 
-  let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-'? '' : 'chatting'} key={index+letter}>{letter}</span>))
+  let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
 
   //Functions
   function SendGuessWord(e) {
@@ -65,11 +65,11 @@ export default function Gameplay({ match }) {
           {Users.map(user => <span key={user.id}>{user.userName}</span>)}
         </div>
 
-        <div id="chatting">
+        <div className="chatting">
           {outputWord.map(outputWord => <span key={uuidv4()}>{outputWord.Text}</span>)}
         </div>
 
-        <div id="guesses">{ inputs }</div>
+        <div>{ inputs }</div>
 
       </div>
       <form onSubmit={SendGuessWord}>

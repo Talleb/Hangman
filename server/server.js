@@ -44,6 +44,20 @@ backEndSocket.on('connection', Socket => {
       guessedLetters.splice(index, 1, data)
     }
 
+    // if (data.length === 1) {
+    //   alphabet.map(letter => {
+    //     if(letter.name === data) {
+    //       exists ? letter.class = "Right" : letter.class = "Wrong"
+    //     }
+    //   })
+    // }
+
+    // if(data.length > 1) {
+    //   console.log(data);
+    // } else {
+
+    // }
+
     backEndSocket.emit('GuessWord', { currentGuessedWords, guessedLetters })
   })
   //When someone Disconnect do this..
