@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {NavLink} from 'react-router-dom'
+import {NavLink, useHistory} from 'react-router-dom'
 import io from 'socket.io-client'
 import './LoadingPage.css'
 
@@ -7,10 +7,11 @@ const FrontEndSocket = io('http://localhost:8080');
 
 const LoadingPage = ({match}) => {
     const [Users, setUsers] = useState([])
-    console.log(match);
-    
+    const [startG, setStartG] = useState(false)
+    //Variables
+    let History = useHistory()
+
     useEffect(() => {
-        console.log(match);
         let nameUrl = match.params.PlayerName
         //Sending name to Server
         FrontEndSocket.emit('UserInfo', nameUrl)
@@ -19,7 +20,22 @@ const LoadingPage = ({match}) => {
         setUsers(data)
         })
     }, [match])
-    
+    useEffect(()=>{
+        FrontEndSocket.emit('StartGame', startG)
+        FrontEndSocket.on('StartG', data => {
+            setStartG(data)
+        })
+        
+        if(startG){
+         History.push("/Gameplay")
+        }
+        
+    }, [startG])
+    //Functions
+    function StartGameSocket() {  
+        setStartG(true)
+    }
+
     return (
         <div className="App">
             <h1>Spooky Hangman</h1>
@@ -29,7 +45,7 @@ const LoadingPage = ({match}) => {
               <h2>users</h2>
               {Users.map(user => <span key={user.id}>{user.userName}</span>)}
             </div>
-            {Users.length < 2 ? "" : <NavLink to="/Gameplay" className="StartGame-Btn">Start Game</NavLink>}
+            {Users.length < 2 ? "" : <button onClick={StartGameSocket} className="StartGame-Btn">Start Game</button>}
         </div>
     )
 }

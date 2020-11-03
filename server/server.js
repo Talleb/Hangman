@@ -32,13 +32,19 @@ backEndSocket.on('connection', Socket => {
      addUser(Socket.id, dataFrontEnd)
      backEndSocket.emit('UsersArray', Users)
   })
-  
+  //Messages Config
   Socket.on('Messages', data => {
     //Find the user who send the Guess Word 
     let user = FindUser(Socket.id)
     currentGuessedWords.push(formatMessage(user.userName, data))
     backEndSocket.emit('GuessWord', currentGuessedWords)
   })
+  //Start Game for both users at same time 
+  Socket.on('StartGame', data =>{
+    console.log(data);
+    backEndSocket.emit('StartG', data)
+  })
+
   //When someone Disconnect do this..
   Socket.on('disconnect', (e)=>{
     console.log(e);
