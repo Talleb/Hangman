@@ -5,13 +5,14 @@ import './Gameplay.css'
 const FrontEndSocket = io('http://localhost:8080');
 
 export default function Gameplay({ match }) {
-  const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
+  const [displayGame, setDisplayGame] = useState('none')
+  const [guessedLetters, setGuessedLetters] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-  //need to Send info from the front end to the back end and connect both users
+  //+++++++ UseEffects
   useEffect(() => {
     let nameUrl = match.params.PlayerName
 
@@ -36,7 +37,7 @@ export default function Gameplay({ match }) {
 
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
 
-  //Functions
+  //++++++++++ Functions
   function SendGuessWord(e) {
     e.preventDefault()
     //Sending Guess Word to the server
@@ -50,6 +51,11 @@ export default function Gameplay({ match }) {
     //Sending Letter to the server
     FrontEndSocket.emit('Messages', e.target.value)
 
+  }
+  function StartingTheGame(){
+    if(Users.length >= 2){
+      setDisplayGame('block')
+    }
   }
 
   function getClass(letter) {
@@ -66,29 +72,31 @@ export default function Gameplay({ match }) {
   return (
     <div>
       <h1>Spooky Hangman</h1>
-      <div>
-        <div id="users">
-          <h2>users</h2>
-          {Users.map(user => <span key={user.id}>{user.userName}</span>)}
+      
+      <div id="users">
+        <h2>users</h2>
+        {Users.map(user => <span key={user.id}>{user.userName}</span>)}
+      </div>
+      <button onClick={StartingTheGame}>Start Game!</button>
+
+      <div id="Gameplay" style={{display:displayGame}}>
+        <div className="TheMysteryWord">{ inputs }</div>
+        <form onSubmit={SendGuessWord}>
+          <label>Guess Word</label>
+          <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
+          <input type="submit" value="Send" />
+        </form>
+        <div>
+          {letters.map((letter) =>
+            <button
+              className={getClass(letter)}
+              value={letter}
+              key={letter}
+              onClick={e => SendLetter(e)}> {letter}
+            </button>)}
         </div>
-
-        <div>{ inputs }</div>
-
       </div>
-      <form onSubmit={SendGuessWord}>
-        <label>Guess Word</label>
-        <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
-        <input type="submit" value="Send" />
-      </form>
-      <div>
-        {letters.map((letter) =>
-          <button
-            className={getClass(letter)}
-            value={letter}
-            key={letter}
-            onClick={e => SendLetter(e)}> {letter}
-          </button>)}
-      </div>
+      
     </div>
   )
 }
