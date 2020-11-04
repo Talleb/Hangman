@@ -39,10 +39,13 @@ backEndSocket.on('connection', Socket => {
 
     currentGuessedWords.push(formatMessage(user.userName, data, exists))
 
-    let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
+    // let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
+    let indexes = data.length === 1 ? checkLetter(data, word) : []  //handleWord
 
-    if (index > -1) {
-      guessedLetters.splice(index, 1, data)
+    if (indexes.length > 0 && data.length === 1) {
+      indexes.forEach(index => {
+        guessedLetters.splice(index, 1, data)
+      })
     }
 
     backEndSocket.emit('GuessWord', { currentGuessedWords, guessedLetters })
@@ -75,4 +78,16 @@ function formatMessage(userName, text, exists){
     text,
     exists
   }
+}
+
+function checkLetter(letter, statement) {
+  let indexes =[]
+  const regex = RegExp(letter.toLowerCase(), 'g')
+  const matches = statement.matchAll(regex)
+
+  for (const match of matches) {
+    indexes.push(match.index)
+  }
+
+  return indexes
 }
