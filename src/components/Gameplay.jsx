@@ -6,6 +6,7 @@ const FrontEndSocket = io('http://localhost:8080');
 
 export default function Gameplay({ match }) {
   const [Users, setUsers] = useState([])
+  const [startG, setStartG] = useState(false)
   const [displayGame, setDisplayGame] = useState('none')
   const [guessedLetters, setGuessedLetters] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
@@ -37,25 +38,34 @@ export default function Gameplay({ match }) {
 
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
 
+  useEffect(() => {
+    FrontEndSocket.on('startNow', data => {
+      setStartG(data)
+    })
+    //If 2 users are online then show the GamePlay
+    if(startG){
+      setDisplayGame('block')
+    }
+    
+  }, [startG])
   //++++++++++ Functions
+  function StartingTheGame(){
+    //Code to start the game for all users via SockeIO
+    FrontEndSocket.emit('StartGame', true)
+  }
+
   function SendGuessWord(e) {
     e.preventDefault()
     //Sending Guess Word to the server
     FrontEndSocket.emit('Messages', WordGuessed)
 
-    e.target.value = ''
+    e.target.value = '' // need to find a way to reset the guessedWord input
   }
 
   function SendLetter(e) {
     e.preventDefault()
     //Sending Letter to the server
     FrontEndSocket.emit('Messages', e.target.value)
-
-  }
-  function StartingTheGame(){
-    if(Users.length >= 2){
-      setDisplayGame('block')
-    }
   }
 
   function getClass(letter) {
@@ -77,7 +87,7 @@ export default function Gameplay({ match }) {
         <h2>users</h2>
         {Users.map(user => <span key={user.id}>{user.userName}</span>)}
       </div>
-      <button onClick={StartingTheGame}>Start Game!</button>
+      <button style={{display:Users.length >= 2 ? 'block' : 'none', margin:'0 auto'}} onClick={StartingTheGame}>Start Game!</button>
 
       <div id="Gameplay" style={{display:displayGame}}>
         <div className="TheMysteryWord">{ inputs }</div>
