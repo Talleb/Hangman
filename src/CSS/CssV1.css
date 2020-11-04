@@ -10,13 +10,25 @@ label {
   color: whitesmoke;
 }
 
-#chatting {
+.chatting {
   /* width: 50%;
   height: 500px;
   margin: 0 auto; */
     font-family: Silent Night;
     color:white;
     font-size: 4em;
+}
+
+.guesses {
+  color:white;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 4em;
+}
+
+.guesses > span {
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  
 }
 
 /* #chatBox #chatting {

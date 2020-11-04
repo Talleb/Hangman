@@ -22,7 +22,7 @@ const LandingPage = () => {
 
             <form onSubmit={submitName}>
                 <label>Name</label>
-                <input onChange={(e) => { setPlayerName(e.target.value) }} type="text" name="nameInfo" placeholder="Inser Name..."></input>
+                <input onChange={(e) => { setPlayerName(e.target.value) }} type="text" name="nameInfo" placeholder="Insert Name..."></input>
                 <input type="submit" value="Submit" />
             </form>
         </div>
