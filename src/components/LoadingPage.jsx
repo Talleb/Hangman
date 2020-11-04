@@ -20,12 +20,13 @@ const LoadingPage = ({match}) => {
         setUsers(data)
         })
     }, [match])
+
+    //When both users have loaded and someone Clicks Start Game Button then both users move to the /Gameplay Component
     useEffect(()=>{
-        FrontEndSocket.emit('StartGame', startG)
         FrontEndSocket.on('StartG', data => {
             setStartG(data)
         })
-        
+        // need to fix the useState clean up function on this if state. Else everything works fine
         if(startG){
          History.push("/Gameplay")
         }
@@ -33,7 +34,8 @@ const LoadingPage = ({match}) => {
     }, [startG])
     //Functions
     function StartGameSocket() {  
-        setStartG(true)
+        //Sending confirmation to all users that the game has started
+        FrontEndSocket.emit('StartGame', true)
     }
 
     return (
