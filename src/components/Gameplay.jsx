@@ -50,10 +50,10 @@ export default function Gameplay({ match }) {
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index + letter}>{letter}</span>))
 
   let playerturn = outputWord.length > 0 
-  ? (outputWord[outputWord.length - 1].userName === match.params.PlayerName)
-  ? true
-  : false
-  : false
+    ? (outputWord[outputWord.length - 1].userName === match.params.PlayerName)
+    ? true
+    : false
+    : false
 
   useEffect(() => {
     FrontEndSocket.on('startNow', data => {
