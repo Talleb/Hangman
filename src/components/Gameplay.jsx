@@ -72,7 +72,7 @@ export default function Gameplay({ match }) {
           {Users.map(user => <span key={user.id}>{user.userName}</span>)}
         </div>
 
-        <div>{ inputs }</div>
+        <div className="word-container">{ inputs }</div>
 
       </div>
       <form onSubmit={SendGuessWord}>

@@ -31,6 +31,10 @@ label {
   
 }
 
+.word-container {
+  height: 8em;
+}
+
 /* #chatBox #chatting {
   margin: 0 auto;
   border: 1px solid #a50000;
