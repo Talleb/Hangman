@@ -1,2 +1,2 @@
 release: npm run build
-web: node server/index.js
+web: node server/server.js
