@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react'
 import io from 'socket.io-client'
 import './Gameplay.css'
 
-const FrontEndSocket = io('http://localhost:8080');
+const FrontEndSocket = io('/');
 
 export default function Gameplay({ match }) {
-  const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
+  const [startG, setStartG] = useState(false)
+  const [displayGame, setDisplayGame] = useState('none')
+  const [guessedLetters, setGuessedLetters] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-  //need to Send info from the front end to the back end and connect both users
+  //+++++++ UseEffects
   useEffect(() => {
     let nameUrl = match.params.PlayerName
 
@@ -28,7 +30,7 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
-      console.log(data);
+      console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
     })
@@ -36,20 +38,34 @@ export default function Gameplay({ match }) {
 
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
 
-  //Functions
+  useEffect(() => {
+    FrontEndSocket.on('startNow', data => {
+      setStartG(data)
+    })
+    //If 2 users are online then show the GamePlay
+    if(startG){
+      setDisplayGame('block')
+    }
+    
+  }, [startG])
+  //++++++++++ Functions
+  function StartingTheGame(){
+    //Code to start the game for all users via SockeIO
+    FrontEndSocket.emit('StartGame', true)
+  }
+
   function SendGuessWord(e) {
     e.preventDefault()
     //Sending Guess Word to the server
     FrontEndSocket.emit('Messages', WordGuessed)
 
-    e.target.value = ''
+    e.target.value = '' // need to find a way to reset the guessedWord input
   }
 
   function SendLetter(e) {
     e.preventDefault()
     //Sending Letter to the server
     FrontEndSocket.emit('Messages', e.target.value)
-
   }
 
   function getClass(letter) {
@@ -66,29 +82,31 @@ export default function Gameplay({ match }) {
   return (
     <div>
       <h1>Spooky Hangman</h1>
-      <div>
-        <div id="users">
-          <h2>users</h2>
-          {Users.map(user => <span key={user.id}>{user.userName}</span>)}
+      
+      <div id="users">
+        <h2>users</h2>
+        {Users.map(user => <span key={user.id}>{user.userName}</span>)}
+      </div>
+      <button style={{display:Users.length >= 2 ? 'block' : 'none', margin:'0 auto'}} onClick={StartingTheGame}>Start Game!</button>
+
+      <div id="Gameplay" style={{display:displayGame}}>
+        <div className="TheMysteryWord">{ inputs }</div>
+        <form onSubmit={SendGuessWord}>
+          <label>Guess Word</label>
+          <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
+          <input type="submit" value="Send" />
+        </form>
+        <div>
+          {letters.map((letter) =>
+            <button
+              className={getClass(letter)}
+              value={letter}
+              key={letter}
+              onClick={e => SendLetter(e)}> {letter}
+            </button>)}
         </div>
-
-        <div>{ inputs }</div>
-
       </div>
-      <form onSubmit={SendGuessWord}>
-        <label>Guess Word</label>
-        <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
-        <input type="submit" value="Send" />
-      </form>
-      <div>
-        {letters.map((letter) =>
-          <button
-            className={getClass(letter)}
-            value={letter}
-            key={letter}
-            onClick={e => SendLetter(e)}> {letter}
-          </button>)}
-      </div>
+      
     </div>
   )
 }
