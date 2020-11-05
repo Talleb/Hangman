@@ -10,7 +10,6 @@ export default function Gameplay({ match }) {
   const [Users, setUsers] = useState([])
   const [startG, setStartG] = useState(false)
   const [displayGame, setDisplayGame] = useState('none')
-  const [guessedLetters, setGuessedLetters] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -36,9 +35,9 @@ export default function Gameplay({ match }) {
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
 
-      let lastGuess = 
+      let lastGuess =
         data.currentGuessedWords[data.currentGuessedWords.length - 1]
-        
+
       if (lastGuess.text.length > 1 && !lastGuess.exists) {
         console.log(lastGuess);
         setShowMessage(true)
@@ -49,21 +48,21 @@ export default function Gameplay({ match }) {
     })
   }, [])
 
-  let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
-  
+  let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index + letter}>{letter}</span>))
+
 
   useEffect(() => {
     FrontEndSocket.on('startNow', data => {
       setStartG(data)
     })
     //If 2 users are online then show the GamePlay
-    if(startG){
+    if (startG) {
       setDisplayGame('block')
     }
-    
+
   }, [startG])
   //++++++++++ Functions
-  function StartingTheGame(){
+  function StartingTheGame() {
     //Code to start the game for all users via SockeIO
     FrontEndSocket.emit('StartGame', true)
   }
@@ -85,7 +84,7 @@ export default function Gameplay({ match }) {
   function getClass(letter) {
     let word = outputWord.find(word => word.text.indexOf(letter) > -1)
     if (word && word.text.length === 1) {
-      if(word.exists) return 'Right'
+      if (word.exists) return 'Right'
       else return 'Wrong'
     } else {
       return 'Active'
@@ -100,17 +99,16 @@ export default function Gameplay({ match }) {
         <h2>users</h2>
         {Users.map(user => <span key={user.id}>{user.userName}</span>)}
       </div>
-                <div className="word-container">
-        { 
-          showMessage 
-            ?  <span className="error">Incorrect word!!</span>
-            : inputs 
+      <div className="word-container">
+        {
+          showMessage
+            ? <span className="error">Incorrect word!!</span>
+            : inputs
         }
-        </div>
-      <button style={{display:Users.length >= 2 ? 'block' : 'none', margin:'0 auto'}} onClick={StartingTheGame}>Start Game!</button>
+      </div>
+      <button style={{ display: Users.length >= 2 ? 'block' : 'none', margin: '0 auto' }} onClick={StartingTheGame}>Start Game!</button>
 
-      <div id="Gameplay" style={{display:displayGame}}>
-        <div className="TheMysteryWord">{ inputs }</div>
+      <div id="Gameplay" style={{ display: displayGame }}>
         <form onSubmit={SendGuessWord}>
           <label>Guess Word</label>
           <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
@@ -126,7 +124,7 @@ export default function Gameplay({ match }) {
             </button>)}
         </div>
       </div>
-      
+
     </div>
   )
 }
