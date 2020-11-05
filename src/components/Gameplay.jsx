@@ -54,7 +54,7 @@ export default function Gameplay({ match }) {
 
   function getClass(letter) {
     let word = outputWord.find(word => word.text.indexOf(letter) > -1)
-    if (word) {
+    if (word && word.text.length === 1) {
       if(word.exists) return 'Right'
       else return 'Wrong'
     } else {
