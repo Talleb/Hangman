@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import io from 'socket.io-client'
 import './Gameplay.css'
 import figure1 from '../images/Figure1.png'
@@ -23,6 +24,7 @@ export default function Gameplay({ match }) {
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
   let figureIndex = 0
   const figures = ["", figure1, figure2, figure3, figure4, figure5, figure6, figure7]
+  const history = useHistory()
 
   //+++++++ UseEffects
   useEffect(() => {
@@ -108,6 +110,13 @@ export default function Gameplay({ match }) {
     setFigure(figures[figureIndex])
   }
 
+  function restart(e) {
+    e.preventDefault()
+    FrontEndSocket.emit('restart', true)
+    console.log('Restarting!!')
+    history.push('/')
+  }
+
   return (
     <div>
       <h1>Spooky Hangman</h1>
@@ -142,6 +151,9 @@ export default function Gameplay({ match }) {
               onClick={e => SendLetter(e)}> {letter}
             </button>)}
         </div>
+      </div>
+      <div>
+        <button onClick={restart}>Restart</button>
       </div>
 
     </div >

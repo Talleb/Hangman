@@ -4,7 +4,7 @@ const socketIO = require('socket.io');
 const path = require('path');
 const http = require('http');
 const cors = require('cors');
-const {addUser, FindUser, Users} = require('./Users');
+const {addUser, FindUser, removeUsers, Users} = require('./Users');
 const randomWords = require('random-words');
 
 
@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/../build')) //Listen to the React html
 //Variables
 const PORT = process.env.PORT || 8080;
 let currentGuessedWords = []
-const word = randomWords();
+let word = randomWords();
 let guessedLetters = Array(word.length).fill('-')
 
 //Server Configurations   //BackEndSocket to send and Socket to Recive
@@ -63,6 +63,12 @@ backEndSocket.on('connection', Socket => {
   Socket.on('disconnect', (e)=>{
     console.log(e);
     console.log("someone disconnected or refreshed site");
+  })
+  
+  Socket.on('restart', () => {
+    word = randomWords()
+    console.log(word)   
+    removeUsers() 
   })
 })
 

@@ -12,4 +12,11 @@ function FindUser(id){
   const user = Users.find(user => user.id === id)
   return user
 }
-module.exports = {addUser, FindUser, Users}
+
+
+function removeUsers() {
+  Users.splice(0)
+}
+
+
+module.exports = {addUser, FindUser, removeUsers, Users}
