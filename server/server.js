@@ -54,6 +54,11 @@ backEndSocket.on('connection', Socket => {
 
     backEndSocket.emit('GuessWord', { currentGuessedWords, guessedLetters })
   })
+
+  //Start Game for all users
+  Socket.on('StartGame', data => {
+    backEndSocket.emit('startNow', data)
+  })
   //When someone Disconnect do this..
   Socket.on('disconnect', (e)=>{
     console.log(e);
