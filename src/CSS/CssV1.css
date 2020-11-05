@@ -35,6 +35,13 @@ label {
   height: 8em;
 }
 
+.error {
+  color: red;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 3.5em;
+  margin-top: 4.5em;
+}
+
 /* #chatBox #chatting {
   margin: 0 auto;
   border: 1px solid #a50000;

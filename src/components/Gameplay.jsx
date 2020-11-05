@@ -5,6 +5,7 @@ import './Gameplay.css'
 const FrontEndSocket = io('http://localhost:8080');
 
 export default function Gameplay({ match }) {
+  const [showMessage, setShowMessage] = useState(false)
   const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
   const [WordGuessed, setWordGuessed] = useState('')
@@ -31,10 +32,22 @@ export default function Gameplay({ match }) {
       console.log(data);
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
+
+      let lastGuess = 
+        data.currentGuessedWords[data.currentGuessedWords.length - 1]
+        
+      if (lastGuess.text.length > 1 && !lastGuess.exists) {
+        console.log(lastGuess);
+        setShowMessage(true)
+        setTimeout(() => {
+          setShowMessage(false)
+        }, 2500)
+      }
     })
   }, [])
 
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
+  
 
   //Functions
   function SendGuessWord(e) {
@@ -71,9 +84,13 @@ export default function Gameplay({ match }) {
           <h2>users</h2>
           {Users.map(user => <span key={user.id}>{user.userName}</span>)}
         </div>
-
-        <div className="word-container">{ inputs }</div>
-
+        <div className="word-container">
+        { 
+          showMessage 
+            ?  <span className="error">Incorrect word!!</span>
+            : inputs 
+        }
+        </div>
       </div>
       <form onSubmit={SendGuessWord}>
         <label>Guess Word</label>
