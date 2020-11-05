@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import io from 'socket.io-client'
 import './Gameplay.css'
 
-const FrontEndSocket = io('http://localhost:8080');
+const FrontEndSocket = io('/');
 
 export default function Gameplay({ match }) {
   const [Users, setUsers] = useState([])
@@ -30,7 +30,7 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
-      console.log(data);
+      console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
     })
