@@ -5,6 +5,8 @@ import './Gameplay.css'
 const FrontEndSocket = io('/');
 
 export default function Gameplay({ match }) {
+  const [showMessage, setShowMessage] = useState(false)
+  const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
   const [startG, setStartG] = useState(false)
   const [displayGame, setDisplayGame] = useState('none')
@@ -33,10 +35,22 @@ export default function Gameplay({ match }) {
       console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
+
+      let lastGuess = 
+        data.currentGuessedWords[data.currentGuessedWords.length - 1]
+        
+      if (lastGuess.text.length > 1 && !lastGuess.exists) {
+        console.log(lastGuess);
+        setShowMessage(true)
+        setTimeout(() => {
+          setShowMessage(false)
+        }, 2500)
+      }
     })
   }, [])
 
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index+letter}>{letter}</span>))
+  
 
   useEffect(() => {
     FrontEndSocket.on('startNow', data => {
@@ -70,7 +84,7 @@ export default function Gameplay({ match }) {
 
   function getClass(letter) {
     let word = outputWord.find(word => word.text.indexOf(letter) > -1)
-    if (word) {
+    if (word && word.text.length === 1) {
       if(word.exists) return 'Right'
       else return 'Wrong'
     } else {
@@ -82,11 +96,17 @@ export default function Gameplay({ match }) {
   return (
     <div>
       <h1>Spooky Hangman</h1>
-      
       <div id="users">
         <h2>users</h2>
         {Users.map(user => <span key={user.id}>{user.userName}</span>)}
       </div>
+                <div className="word-container">
+        { 
+          showMessage 
+            ?  <span className="error">Incorrect word!!</span>
+            : inputs 
+        }
+        </div>
       <button style={{display:Users.length >= 2 ? 'block' : 'none', margin:'0 auto'}} onClick={StartingTheGame}>Start Game!</button>
 
       <div id="Gameplay" style={{display:displayGame}}>
