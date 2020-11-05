@@ -18,7 +18,7 @@ app.use(cors())
 app.use(express.static(__dirname + '/../build')) //Listen to the React html
 
 //Variables
-const PORT = 8080 || process.env.PORT
+const PORT = process.env.PORT || 8080;
 let currentGuessedWords = []
 const word = randomWords();
 let guessedLetters = Array(word.length).fill('-')
