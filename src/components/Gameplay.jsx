@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import io from 'socket.io-client'
 import './Gameplay.css'
+import figure1 from '../images/Figure1.png'
+import figure2 from '../images/Figure2.png'
+import figure3 from '../images/Figure3.png'
+import figure4 from '../images/Figure4.png'
+import figure5 from '../images/Figure5.png'
+import figure6 from '../images/Figure6.png'
 
 const FrontEndSocket = io('/');
 
 export default function Gameplay({ match }) {
+  const [figure, setFigure] = useState("")
   const [showMessage, setShowMessage] = useState(false)
   const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
@@ -98,6 +105,9 @@ export default function Gameplay({ match }) {
       <div id="users">
         <h2>users</h2>
         {Users.map(user => <span key={user.id}>{user.userName}</span>)}
+      </div>
+      <div>
+        <img src={figure} />
       </div>
       <div className="word-container">
         {
