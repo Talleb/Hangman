@@ -35,18 +35,22 @@ backEndSocket.on('connection', Socket => {
   Socket.on('Messages', data => {
     //Find the user who send the Guess Word 
     let user = FindUser(Socket.id)
-    let exists = (word.includes(data.toLowerCase()) || word === data.toLowerCase()) ? true : false
+    let exists = (data.length === 1 && word.includes(data.toLowerCase()) ||    
+      word === data.toLowerCase()) 
+      ? true 
+      : false
 
-    currentGuessedWords.push(formatMessage(user.userName, data, exists))
+    currentGuessedWords.push(formatMessage(user.userName, data.toUpperCase(), exists))
 
-    // let index = data.length === 1 ? word.indexOf(data.toLowerCase()) : -1;
-    let indexes = data.length === 1 ? checkLetter(data, word) : []  //handleWord
+    let indexes = data.length === 1 ? checkLetter(data, word) : []
 
     if (indexes.length > 0 && data.length === 1) {
-      indexes.forEach(index => {
-        guessedLetters.splice(index, 1, data)
-      })
-    }
+        indexes.forEach(index => {
+          guessedLetters.splice(index, 1, data)
+        })
+    } 
+    if (data.length > 1 && exists) guessedLetters = data.split('')
+    console.log(guessedLetters);
 
     backEndSocket.emit('GuessWord', { currentGuessedWords, guessedLetters })
   })
@@ -67,8 +71,12 @@ app.get('/*', function (req, res) {
 })
 
 server.listen(PORT, ()=>{
-  console.log(`Server is running on PORT: ${PORT}`);
-  console.log(word);  
+  try {
+    console.log(`Server is running on PORT: ${PORT}`);
+    console.log(word);  
+  } catch (error) {
+    console.error(error);
+  }
 })
 
 //Functions
@@ -90,4 +98,6 @@ function checkLetter(letter, statement) {
   }
 
   return indexes
+  
 }
+
