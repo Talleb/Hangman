@@ -7,6 +7,7 @@ import './App.css';
 import './CSS/CssV1.css'
 import LandingPage from './components/LandingPage.jsx'
 import LoadingPage from './components/LoadingPage.jsx'
+import EndPage from './components/EndPage.jsx'
 
 
 function App() {
@@ -36,6 +37,11 @@ function App() {
             <Route path="/mainpage">
               <div className="App">
                 <MainPage />
+              </div>
+            </Route>
+            <Route path="/endpage">
+              <div className="App">
+                <EndPage />
               </div>
             </Route>
             <Route path="/">

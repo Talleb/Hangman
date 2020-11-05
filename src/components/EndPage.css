@@ -1,0 +1,26 @@
+h1{
+    font-family: Silent Night;
+    color:white;
+    font-size: 2,5em;
+}
+
+h2{
+    font-family: Comic sans-serif;
+    color:greenyellow;
+    font-size: 3em;
+}
+
+h3{
+    font-family: Comic sans-serif;
+    color:greenyellow;
+    font-size: 5em;
+}
+
+.endButton {
+    background: goldenrod;
+    border-radius: 30px;
+    color: white;
+    width: 300px;
+    height: 50px;
+    font-size: 2em;
+  }

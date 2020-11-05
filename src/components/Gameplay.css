@@ -6,10 +6,11 @@ h1{
 
 .Active{
     border: none;
-    padding: 1em;
+    padding: 2em;
     margin: 0.3em;
     font-family: Silent Night;
-    font-weight: 600;
+    font-weight: 1000;
+    background: goldenrod;
 }
 
 .Right{
