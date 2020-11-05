@@ -12,8 +12,8 @@ export default function Gameplay({ match }) {
   const [displayGame, setDisplayGame] = useState('none')
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
+  const [turn, setTurn] = useState(true)
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-  console.log(Users);
 
   //+++++++ UseEffects
   useEffect(() => {
@@ -32,7 +32,6 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
-      console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
 
@@ -40,7 +39,6 @@ export default function Gameplay({ match }) {
         data.currentGuessedWords[data.currentGuessedWords.length - 1]
 
       if (lastGuess.text.length > 1 && !lastGuess.exists) {
-        console.log(lastGuess);
         setShowMessage(true)
         setTimeout(() => {
           setShowMessage(false)
@@ -51,6 +49,11 @@ export default function Gameplay({ match }) {
 
   let inputs = guessedLetters.map((letter, index) => (<span className={letter === '-' ? 'guesses' : 'chatting'} key={index + letter}>{letter}</span>))
 
+  let playerturn = outputWord.length > 0 
+  ? (outputWord[outputWord.length - 1].userName === match.params.PlayerName)
+  ? true
+  : false
+  : false
 
   useEffect(() => {
     FrontEndSocket.on('startNow', data => {
@@ -62,9 +65,10 @@ export default function Gameplay({ match }) {
     }
 
   }, [startG])
+
   //++++++++++ Functions
   function StartingTheGame() {
-    //Code to start the game for all users via SockeIO
+    //Code to start the game for all users via SocketIO
     FrontEndSocket.emit('StartGame', true)
   }
 
@@ -112,12 +116,13 @@ export default function Gameplay({ match }) {
       <div id="Gameplay" style={{ display: displayGame }}>
         <form onSubmit={SendGuessWord}>
           <label>Guess Word</label>
-          <input onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
-          <input type="submit" value="Send" />
+          <input disabled={playerturn} onChange={(e) => { setWordGuessed(e.target.value) }} maxLength="15" type="text" placeholder="Send Text" />
+          <input disabled={playerturn} type="submit" value="Send" />
         </form>
         <div>
           {letters.map((letter) =>
             <button
+            disabled={playerturn}
               className={getClass(letter)}
               value={letter}
               key={letter}
