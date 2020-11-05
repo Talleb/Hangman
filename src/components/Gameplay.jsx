@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import io from 'socket.io-client'
 import './Gameplay.css'
+import figure1 from '../images/Figure1.png'
+import figure2 from '../images/Figure2.png'
+import figure3 from '../images/Figure3.png'
+import figure4 from '../images/Figure4.png'
+import figure5 from '../images/Figure5.png'
+import figure6 from '../images/Figure6.png'
+import figure7 from '../images/Figure7.png'
 
 const FrontEndSocket = io('/');
 
 export default function Gameplay({ match }) {
+  const [figure, setFigure] = useState("")
   const [showMessage, setShowMessage] = useState(false)
   const [guessedLetters, setGuessedLetters] = useState([])
   const [Users, setUsers] = useState([])
@@ -14,6 +22,8 @@ export default function Gameplay({ match }) {
   const [outputWord, setOutputWord] = useState([])
   const [turn, setTurn] = useState(true)
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+  let figureIndex = 0
+  const figures = ["", figure1, figure2, figure3, figure4, figure5, figure6, figure7]
 
   //+++++++ UseEffects
   useEffect(() => {
@@ -32,6 +42,7 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
+      data.currentGuessedWords[data.currentGuessedWords.length - 1].exists === true ? console.log('Right') : hangMan()
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
 
@@ -96,6 +107,11 @@ export default function Gameplay({ match }) {
     }
   }
 
+  function hangMan() {
+    figureIndex = figureIndex + 1
+    console.log("Wrong")
+    setFigure(figures[figureIndex])
+  }
 
   return (
     <div>
@@ -103,6 +119,9 @@ export default function Gameplay({ match }) {
       <div id="users">
         <h2>users</h2>
         {Users.map(user => <span key={user.id}>{user.userName}</span>)}
+      </div>
+      <div>
+        <img src={figure} />
       </div>
       <div className="word-container">
         {
@@ -131,6 +150,6 @@ export default function Gameplay({ match }) {
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
