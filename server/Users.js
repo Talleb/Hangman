@@ -2,8 +2,7 @@ const Users = []
 
 function addUser (id, userName){
   const User = {id, userName}
-  Users.push(User)
-  
+  if(Users.length < 2) Users.push(User)
   return User
 }
 

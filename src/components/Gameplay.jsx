@@ -13,6 +13,7 @@ export default function Gameplay({ match }) {
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+  console.log(Users);
 
   //+++++++ UseEffects
   useEffect(() => {
