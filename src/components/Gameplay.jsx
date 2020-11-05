@@ -7,6 +7,7 @@ import figure3 from '../images/Figure3.png'
 import figure4 from '../images/Figure4.png'
 import figure5 from '../images/Figure5.png'
 import figure6 from '../images/Figure6.png'
+import figure7 from '../images/Figure7.png'
 
 const FrontEndSocket = io('/');
 
@@ -20,6 +21,8 @@ export default function Gameplay({ match }) {
   const [WordGuessed, setWordGuessed] = useState('')
   const [outputWord, setOutputWord] = useState([])
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+  let figureIndex = 0
+  const figures = ["", figure1, figure2, figure3, figure4, figure5, figure6, figure7]
 
   //+++++++ UseEffects
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function Gameplay({ match }) {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
       console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
+      data.currentGuessedWords[data.currentGuessedWords.length - 1].exists === true ? console.log('Right') : hangMan()
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
 
@@ -98,6 +102,11 @@ export default function Gameplay({ match }) {
     }
   }
 
+  function hangMan() {
+    figureIndex = figureIndex + 1
+    console.log("Wrong")
+    setFigure(figures[figureIndex])
+  }
 
   return (
     <div>
@@ -135,6 +144,6 @@ export default function Gameplay({ match }) {
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
