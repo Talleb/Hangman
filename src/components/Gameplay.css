@@ -29,3 +29,20 @@ h1{
     font-weight: 600;
     background: red;
 }
+
+div > button:nth-child(1){
+    
+    font-family: Silent Night;
+    font-weight: bold;
+    margin: 2.5em;
+    padding: 0.5em;
+}
+
+div > button:nth-child(1):hover{
+    background-color: red;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    margin: 2.5em;
+    padding: 0.6em 1.3em;
+}

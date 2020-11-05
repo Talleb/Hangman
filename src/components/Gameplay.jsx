@@ -112,9 +112,12 @@ export default function Gameplay({ match }) {
 
   function restart(e) {
     e.preventDefault()
-    FrontEndSocket.emit('restart', true)
+    FrontEndSocket.emit('restart')
     console.log('Restarting!!')
-    history.push('/')
+
+    setTimeout(() => {
+      history.push('/')
+    }, 900)
   }
 
   return (
@@ -151,9 +154,9 @@ export default function Gameplay({ match }) {
               onClick={e => SendLetter(e)}> {letter}
             </button>)}
         </div>
-      </div>
       <div>
         <button onClick={restart}>Restart</button>
+      </div>
       </div>
 
     </div >
