@@ -67,8 +67,12 @@ backEndSocket.on('connection', Socket => {
   
   Socket.on('restart', () => {
     word = randomWords()
-    console.log(word)   
+    guessedLetters = Array(word.length).fill('-')
+    currentGuessedWords = []
     removeUsers() 
+    console.log(word)   
+
+    backEndSocket.emit('restartGame', { Users, guessedLetters })
   })
 })
 

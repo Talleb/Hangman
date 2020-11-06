@@ -43,8 +43,8 @@ export default function Gameplay({ match }) {
   useEffect(() => {
     //Acceting GuessWord with user from server
     FrontEndSocket.on('GuessWord', data => {
-      console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
-      data.currentGuessedWords[data.currentGuessedWords.length - 1].exists === true ? console.log('Right') : hangMan()
+      // console.log(data); // this is an object with currentGuessedWorsd and GuessedLetters
+      data.currentGuessedWords[data.currentGuessedWords.length - 1].exists === true ? console.log('') : hangMan()
       setOutputWord(data.currentGuessedWords)
       setGuessedLetters(data.guessedLetters)
 
@@ -52,12 +52,19 @@ export default function Gameplay({ match }) {
         data.currentGuessedWords[data.currentGuessedWords.length - 1]
 
       if (lastGuess.text.length > 1 && !lastGuess.exists) {
-        console.log(lastGuess);
         setShowMessage(true)
         setTimeout(() => {
           setShowMessage(false)
         }, 2500)
       }
+    })
+  }, [])
+
+  useEffect(() => {
+    FrontEndSocket.on('restartGame', data => {
+      setTimeout(() => {
+        history.push('/')
+      }, 800)
     })
   }, [])
 
@@ -106,18 +113,12 @@ export default function Gameplay({ match }) {
 
   function hangMan() {
     figureIndex = figureIndex + 1
-    console.log("Wrong")
     setFigure(figures[figureIndex])
   }
 
   function restart(e) {
     e.preventDefault()
     FrontEndSocket.emit('restart')
-    console.log('Restarting!!')
-
-    setTimeout(() => {
-      history.push('/')
-    }, 900)
   }
 
   return (
